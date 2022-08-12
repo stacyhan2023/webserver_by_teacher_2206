@@ -37,7 +37,7 @@ GET / HTTP/1.1
 
 URL地址格式:
 协议://主机地址信息/抽象路径
-http://localhost:8088/TeduStore/index
+http://localhost:8088/TeduStore/index.html
 GET /TeduStore/index.html HTTP/1.1
 
 2:消息头
