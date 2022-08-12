@@ -54,7 +54,7 @@ public class ClientHandler implements Runnable{
              */
             String[] data = line.split("\\s");
             method = data[0];
-            uri = data[1];
+            uri = data[1];//这里可能出现数组下标越界异常ArrayIndexOutOfBoundsException,原因是浏览器的问题！！！后期我们解决。建议:浏览器测试时尽量不使用后退，前进这样的功能测试。
             protocol = data[2];
             System.out.println("method:"+method);//method:GET
             System.out.println("uri:"+uri);//uri:/index.html
