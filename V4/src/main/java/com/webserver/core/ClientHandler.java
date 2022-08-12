@@ -37,6 +37,13 @@ public class ClientHandler implements Runnable{
             System.out.println("protocol:"+protocol);
 
             //读取消息头
+            while(true) {
+                line = readLine();
+                if(line.isEmpty()){//如果单独读取回车+换行，readLine方法会返回空字符串
+                    break;
+                }
+                System.out.println("消息头:" + line);
+            }
 
 
         } catch (IOException e) {
@@ -45,6 +52,7 @@ public class ClientHandler implements Runnable{
     }
 
     private String readLine() throws IOException {
+        //当对同一个socket调用多次getInputStream方法时，获取回来的输入流始终是同一条流
         InputStream in = socket.getInputStream();
         int d;
         StringBuilder builder = new StringBuilder();
