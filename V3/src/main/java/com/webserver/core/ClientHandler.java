@@ -23,8 +23,11 @@ public class ClientHandler implements Runnable{
         try {
             InputStream in = socket.getInputStream();
             /*
-                GET /index.html HTTP/1.1(CRLF)
-                ^
+                http://localhost:8088/index.html
+                请求行:GET /index.html HTTP/1.1
+
+                http://localhost:8088
+                请求行:GET / HTTP/1.1
              */
             int d;
             StringBuilder builder = new StringBuilder();
@@ -37,8 +40,22 @@ public class ClientHandler implements Runnable{
                 builder.append(cur);
                 pre = cur;
             }
-            String line = builder.toString();
+            String line = builder.toString().trim();
             System.out.println("请求行:"+line);
+
+            //请求行相关信息
+            String method;//请求方式
+            String uri;//抽象路径
+            String protocol;//协议版本
+            /*
+                GET /index.html HTTP/1.1
+                data:{GET, /index.html, HTTP/1.1}
+                提示:\s在正则表达式中表示一个空白字符
+             */
+            String[] data = line.split("\\s");
+            method = data[0];
+            uri = data[1];
+            protocol = data[2];
 
 
         } catch (IOException e) {
