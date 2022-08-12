@@ -15,7 +15,7 @@ public class ClientHandler implements Runnable{
     public void run(){
         try {
             InputStream in = socket.getInputStream();
-
+//            http://localhost:8088/index.html
             int d;
             while((d = in.read())!=-1){
                 System.out.print((char)d);
