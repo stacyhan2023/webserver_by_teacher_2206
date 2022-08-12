@@ -3,6 +3,8 @@ package com.webserver.core;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 与客户端完成一次HTTP的交互
@@ -37,13 +39,17 @@ public class ClientHandler implements Runnable{
             System.out.println("protocol:"+protocol);
 
             //读取消息头
+            Map<String,String> headers = new HashMap<>();
+//            while(!(line = readLine()).isEmpty()){
             while(true) {
                 line = readLine();
                 if(line.isEmpty()){//如果单独读取回车+换行，readLine方法会返回空字符串
                     break;
                 }
                 System.out.println("消息头:" + line);
+                //将消息头按照冒号空格拆分为消息头的名字和值，并以key，value形式存入headers中
             }
+            System.out.println("headers:"+headers);
 
 
         } catch (IOException e) {
