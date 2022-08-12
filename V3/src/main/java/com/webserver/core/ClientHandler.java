@@ -56,8 +56,10 @@ public class ClientHandler implements Runnable{
             method = data[0];
             uri = data[1];
             protocol = data[2];
-
-
+            System.out.println("method:"+method);//method:GET
+            System.out.println("uri:"+uri);//uri:/index.html
+            System.out.println("protocol:"+protocol);//protocol:HTTP/1.1
+//          http://localhost:8088/index.html
         } catch (IOException e) {
             e.printStackTrace();
         }
