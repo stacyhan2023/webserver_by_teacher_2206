@@ -49,6 +49,17 @@ public class ClientHandler implements Runnable{
             HttpServletRequest request = new HttpServletRequest(socket);
 
             //2处理请求
+            /*
+                http://localhost:8080/index.html
+                path:/index.html
+
+
+                http://localhost:8080/classtable.html
+                path:/classTable.html
+
+                http://localhost:8080/123.html
+                path:/123.html
+             */
             String path = request.getUri();
             System.out.println("请求的抽象路径:"+path);
 
@@ -58,7 +69,7 @@ public class ClientHandler implements Runnable{
             //实际虚拟机执行是查看的是target/class目录下的内容
             //maven项目编译后会将src/main/java和src/main/resources下的内容合并放在target/classes下
             //因此我们实际要定位的是target/classes/static/index.html
-            File file = new File(staticDir,"index.html");
+            File file = new File(staticDir,path);
             /*
                 HTTP/1.1 200 OK(CRLF)
                 Content-Type: text/html(CRLF)
