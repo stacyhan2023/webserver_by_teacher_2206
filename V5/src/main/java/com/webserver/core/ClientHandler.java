@@ -28,6 +28,12 @@ public class ClientHandler implements Runnable{
             //1解析请求,实例化请求对象的过程就是解析的过程
             HttpServletRequest request = new HttpServletRequest(socket);
 
+            //2处理请求
+            String path = request.getUri();
+            System.out.println("请求的抽象路径:"+path);
+
+
+            //3发送响应
 
         } catch (IOException e) {
             e.printStackTrace();
