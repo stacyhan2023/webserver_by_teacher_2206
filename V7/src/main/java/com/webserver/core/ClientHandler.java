@@ -51,10 +51,7 @@ public class ClientHandler implements Runnable{
             //2处理请求
             String path = request.getUri();
             System.out.println("请求的抽象路径:"+path);
-
-            //3发送响应
             File file = new File(staticDir,path);
-
             String line;
             if(file.isFile()){//浏览器请求的资源是否存在且是一个文件
                 //正确响应其请求的文件
@@ -64,30 +61,20 @@ public class ClientHandler implements Runnable{
                 line = "HTTP/1.1 404 NotFound";
                 file = new File(staticDir,"/root/404.html");
             }
-            OutputStream out = socket.getOutputStream();
+
+
+
+            //3发送响应
             //发送状态行
-            byte[] data = line.getBytes(StandardCharsets.ISO_8859_1);
-            out.write(data);
-            out.write(13);
-            out.write(10);
-
+            println(line);
             //发送响应头
-            line = "Content-Type: text/html";//告诉浏览器正文类型
-            data = line.getBytes(StandardCharsets.ISO_8859_1);
-            out.write(data);
-            out.write(13);
-            out.write(10);
-
-            line = "Content-Length: "+file.length();//告诉浏览器正文长度(单位字节)
-            data = line.getBytes(StandardCharsets.ISO_8859_1);
-            out.write(data);
-            out.write(13);
-            out.write(10);
+            println("Content-Type: text/html");//告诉浏览器正文类型
+            println("Content-Length: "+file.length());//告诉浏览器正文长度(单位字节)
             //单独发送个回车+换行表示响应头发送完毕
-            out.write(13);
-            out.write(10);
+            println("");
 
-            //发送响应正文(index.html页面的所有数据)
+            //发送响应正文
+            OutputStream out = socket.getOutputStream();
             FileInputStream fis = new FileInputStream(file);
             byte[] buf = new byte[1024*10];//10kb
             int len = 0;//记录每次实际读取的字节数
@@ -106,6 +93,12 @@ public class ClientHandler implements Runnable{
         }
     }
 
-
+    private void println(String line) throws IOException {
+        OutputStream out = socket.getOutputStream();
+        byte[] data = line.getBytes(StandardCharsets.ISO_8859_1);
+        out.write(data);
+        out.write(13);
+        out.write(10);
+    }
 
 }
