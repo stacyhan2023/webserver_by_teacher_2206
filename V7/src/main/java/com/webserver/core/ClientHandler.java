@@ -49,36 +49,23 @@ public class ClientHandler implements Runnable{
             HttpServletRequest request = new HttpServletRequest(socket);
 
             //2处理请求
-            /*
-                http://localhost:8080/index.html
-                path:/index.html
-
-
-                http://localhost:8080/classtable.html
-                path:/classTable.html
-
-                http://localhost:8080/123.html
-                path:/123.html
-             */
             String path = request.getUri();
             System.out.println("请求的抽象路径:"+path);
 
-
             //3发送响应
-            //本版本测试,将resources下的static目录中的index.html页面响应给浏览器
-            //实际虚拟机执行是查看的是target/class目录下的内容
-            //maven项目编译后会将src/main/java和src/main/resources下的内容合并放在target/classes下
-            //因此我们实际要定位的是target/classes/static/index.html
             File file = new File(staticDir,path);
-            /*
-                HTTP/1.1 200 OK(CRLF)
-                Content-Type: text/html(CRLF)
-                Content-Length: 2546(CRLF)(CRLF)
-                1011101010101010101......
-             */
+
+            String line;
+            if(file.isFile()){//浏览器请求的资源是否存在且是一个文件
+                //正确响应其请求的文件
+                line = "HTTP/1.1 200 OK";
+            }else{
+                //响应404
+                line = "HTTP/1.1 404 NotFound";
+                file = new File(staticDir,"/root/404.html");
+            }
             OutputStream out = socket.getOutputStream();
             //发送状态行
-            String line = "HTTP/1.1 200 OK";
             byte[] data = line.getBytes(StandardCharsets.ISO_8859_1);
             out.write(data);
             out.write(13);
