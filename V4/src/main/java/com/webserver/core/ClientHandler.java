@@ -48,6 +48,8 @@ public class ClientHandler implements Runnable{
                 }
                 System.out.println("消息头:" + line);
                 //将消息头按照冒号空格拆分为消息头的名字和值，并以key，value形式存入headers中
+                data = line.split(":\\s");//Connection: keep-alive==>data:[Connection, keep-alive]
+                headers.put(data[0],data[1]);
             }
             System.out.println("headers:"+headers);
 
