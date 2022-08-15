@@ -49,6 +49,8 @@ public class ClientHandler implements Runnable{
                         ClientHandler.class.getClassLoader()
                                 .getResource(".").toURI()
                 );
+                //定位target/classes/static目录
+                File staticDir = new File(dir,"static");
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
