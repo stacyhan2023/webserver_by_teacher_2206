@@ -2,9 +2,11 @@ package com.webserver.core;
 
 import com.webserver.http.HttpServletRequest;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +36,23 @@ public class ClientHandler implements Runnable{
 
 
             //3发送响应
+            //本版本测试,将resources下的static目录中的index.html页面响应给浏览器
+            //实际虚拟机执行是查看的是target/class目录下的内容
+            //maven项目编译后会将src/main/java和src/main/resources下的内容合并放在target/classes下
+            //因此我们实际要定位的是target/classes/static/index.html
+            //类加载路径
+
+            //定位环境变量ClassPath(类加载路径)中"."的位置
+            //在IDEA中执行项目时,类加载路径是从target/classes开始的
+            try {
+                File dir = new File(
+                        ClientHandler.class.getClassLoader()
+                                .getResource(".").toURI()
+                );
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();
