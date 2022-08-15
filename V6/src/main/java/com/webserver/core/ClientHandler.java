@@ -51,6 +51,7 @@ public class ClientHandler implements Runnable{
                 );
                 //定位target/classes/static目录
                 File staticDir = new File(dir,"static");
+                System.out.println("static是否存在:"+staticDir.exists());
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
