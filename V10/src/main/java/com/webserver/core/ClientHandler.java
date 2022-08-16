@@ -3,12 +3,8 @@ package com.webserver.core;
 import com.webserver.http.HttpServletRequest;
 import com.webserver.http.HttpServletResponse;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.Socket;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 与客户端完成一次HTTP的交互
@@ -32,9 +28,7 @@ public class ClientHandler implements Runnable{
             HttpServletResponse response = new HttpServletResponse(socket);
 
             //2处理请求
-            DispatcherServlet servlet = new DispatcherServlet();
-            servlet.service(request,response);
-
+            DispatcherServlet.getInstance().service(request,response);
 
             //3发送响应
             response.response();

@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
  * 使得处理请求的环节可以由Spring MVC框架完成.
  */
 public class DispatcherServlet {
+    private static DispatcherServlet instance = new DispatcherServlet();
     private static File dir;
     private static File staticDir;
     static {
@@ -30,6 +31,11 @@ public class DispatcherServlet {
         }
     }
 
+    private DispatcherServlet(){}
+
+    public static DispatcherServlet getInstance(){
+        return instance;
+    }
 
     /**
      * 处理请求的方法
