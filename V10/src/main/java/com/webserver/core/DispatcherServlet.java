@@ -49,12 +49,18 @@ public class DispatcherServlet {
         if(file.isFile()){//浏览器请求的资源是否存在且是一个文件
             //正确响应其请求的文件
             response.setContentFile(file);
+            //添加用于说明正文的响应头Content-Type和Content-Length
+            response.addHeader("Content-Type","text/html");
+            response.addHeader("Content-Length",file.length()+"");
+
         }else{
             //响应404
             response.setStatusCode(404);
             response.setStatusReason("NotFound");
             file = new File(staticDir,"/root/404.html");
             response.setContentFile(file);
+            response.addHeader("Content-Type","text/html");
+            response.addHeader("Content-Length",file.length()+"");
         }
     }
 }
