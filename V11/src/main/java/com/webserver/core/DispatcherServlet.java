@@ -51,31 +51,12 @@ public class DispatcherServlet {
         if(file.isFile()){//浏览器请求的资源是否存在且是一个文件
             //正确响应其请求的文件
             response.setContentFile(file);
-            //添加用于说明正文的响应头Content-Type和Content-Length
-            try {
-                String contentType = Files.probeContentType(file.toPath());
-                /*
-                    如果根据正文文件分析出了Content-Type的值则设置该响应头.
-                    HTTP协议规定如果服务端发送的响应中没有包含这个头,就表明让浏览器自行判断
-                    响应正文的内容类型.
-                 */
-                if(contentType!=null){
-                    response.addHeader("Content-Type",contentType);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            response.addHeader("Content-Length",file.length()+"");
-
         }else{
             //响应404
             response.setStatusCode(404);
             response.setStatusReason("NotFound");
             file = new File(staticDir,"/root/404.html");
             response.setContentFile(file);
-            response.addHeader("Content-Type","text/html");
-            response.addHeader("Content-Length",file.length()+"");
         }
     }
 }
