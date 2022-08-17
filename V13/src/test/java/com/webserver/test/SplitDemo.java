@@ -10,11 +10,11 @@ public class SplitDemo {
         //data:[1, 2=3=4=5=6=====]
         System.out.println(Arrays.toString(data));
         //data:[1, 2, 3=4=5=6=====]
-        data = line.split("=",3);
-
-        data = line.split("=",10);
+        data = line.split("=",3);//拆分3项
+        //当指定的拆分项超过了最多可拆分项时,则返回最多可拆分项内容.
+        data = line.split("=",10);//拆分10项
         System.out.println(Arrays.toString(data));
-        //和split("=")效果一致
+        //和split("=")效果一致,会自动忽略末尾连续拆分出来的空字符串
         data = line.split("=",0);
         System.out.println(Arrays.toString(data));
         //若字符串末尾连续匹配可拆分项,那么所有拆分出来的空字符串全部保留
