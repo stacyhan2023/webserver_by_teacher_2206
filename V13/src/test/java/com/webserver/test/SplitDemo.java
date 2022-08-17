@@ -13,7 +13,7 @@ public class SplitDemo {
         data = line.split("=",3);//拆分3项
         System.out.println(Arrays.toString(data));
         //当指定的拆分项超过了最多可拆分项时,则返回最多可拆分项内容.
-        data = line.split("=",10);//拆分10项
+        data = line.split("=",100);//拆分12项
         System.out.println(Arrays.toString(data));
         //和split("=")效果一致,会自动忽略末尾连续拆分出来的空字符串
         data = line.split("=",0);
