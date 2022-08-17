@@ -76,11 +76,11 @@ public class HttpServletRequest {
             queryString = data[1];
             //paras:[username=fancq, password=, nickname=chuanqi, age=22]
             String[] paras = queryString.split("&");
-            //para:username=fancq
+            //para:username=
             for(String para : paras){
                 //array:[username,fancq]   若没参数值array:[password]
-                String[] array = para.split("=");
-                parameters.put(array[0],array.length>1?array[1]:"");
+                String[] array = para.split("=",2);
+                parameters.put(array[0],array[1]);
             }
         }
 
