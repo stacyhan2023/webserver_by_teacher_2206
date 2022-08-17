@@ -11,6 +11,7 @@ public class SplitDemo {
         System.out.println(Arrays.toString(data));
         //data:[1, 2, 3=4=5=6=====]
         data = line.split("=",3);//拆分3项
+        System.out.println(Arrays.toString(data));
         //当指定的拆分项超过了最多可拆分项时,则返回最多可拆分项内容.
         data = line.split("=",10);//拆分10项
         System.out.println(Arrays.toString(data));
