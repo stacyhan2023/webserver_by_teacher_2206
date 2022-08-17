@@ -141,4 +141,19 @@ public class HttpServletResponse {
     public void addHeader(String name,String value){
         headers.put(name,value);
     }
+
+    /**
+     * 发送重定向响应,要求浏览器重新请求path指定的位置.
+     * @param path
+     */
+    public void sendRedirect(String path){
+        //重定向的状态代码为302
+        statusCode = 302;
+        statusReason = "MovedTemporarily";
+        //响应头Location
+        addHeader("Location",path);
+
+    }
+
+
 }

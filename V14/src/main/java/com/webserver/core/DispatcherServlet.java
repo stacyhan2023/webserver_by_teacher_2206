@@ -55,8 +55,9 @@ public class DispatcherServlet {
             System.out.println("开始处理注册业务!!!!!!!!!!!!!!!!!!!!!");
             UserController controller = new UserController();
             controller.reg(request,response);
-
-
+        }else if("/loginUser".equals(path)){
+            UserController controller = new UserController();
+//            controller.login(request,response);
         }else {
             File file = new File(staticDir, path);
             if (file.isFile()) {//浏览器请求的资源是否存在且是一个文件
