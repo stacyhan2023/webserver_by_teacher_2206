@@ -5,9 +5,7 @@ import com.webserver.http.HttpServletRequest;
 import com.webserver.http.HttpServletResponse;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 
 /**
  * 用于完成一个http交互流程中处理请求的环节工作.
@@ -24,7 +22,7 @@ public class DispatcherServlet {
         //在IDEA中执行项目时,类加载路径是从target/classes开始的
         try {
             dir = new File(
-                    ClientHandler.class.getClassLoader()
+                    DispatcherServlet.class.getClassLoader()
                             .getResource(".").toURI()
             );
             //定位target/classes/static目录
