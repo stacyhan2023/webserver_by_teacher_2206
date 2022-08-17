@@ -57,7 +57,7 @@ public class DispatcherServlet {
             controller.reg(request,response);
         }else if("/loginUser".equals(path)){
             UserController controller = new UserController();
-//            controller.login(request,response);
+            controller.login(request,response);
         }else {
             File file = new File(staticDir, path);
             if (file.isFile()) {//浏览器请求的资源是否存在且是一个文件
