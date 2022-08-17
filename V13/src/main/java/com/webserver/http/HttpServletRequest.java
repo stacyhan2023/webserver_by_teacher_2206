@@ -64,7 +64,25 @@ public class HttpServletRequest {
               将参数部分首先按照"&"拆分出每一组参数，再将每一组参数按照"="拆分为参数名与参数值
               并将参数名作为key，参数值作为value存入到parameters中。
          */
-
+        /*
+            /index.html
+            /reg?
+            /reg?username=xxx...
+         */
+        String[] data = uri.split("\\?");
+        requestURI = data[0];
+        if(data.length>1){//有参数
+            //queryString:username=fancq&password=&nickname=chuanqi&age=22
+            queryString = data[1];
+            //paras:[username=fancq, password=, nickname=chuanqi, age=22]
+            String[] paras = queryString.split("&");
+            //para:username=fancq
+            for(String para : paras){
+                //array:[username,fancq]   若没参数值array:[password]
+                String[] array = para.split("=");
+                parameters.put(array[0],array.length>1?array[1]:"");
+            }
+        }
 
         System.out.println("requestURI:"+requestURI);
         System.out.println("queryString:"+queryString);
