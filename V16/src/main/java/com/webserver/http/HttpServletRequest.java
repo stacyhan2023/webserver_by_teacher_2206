@@ -75,19 +75,28 @@ public class HttpServletRequest {
         if(data.length>1){//有参数
             //queryString:username=fancq&password=&nickname=chuanqi&age=22
             queryString = data[1];
-            //paras:[username=fancq, password=, nickname=chuanqi, age=22]
-            String[] paras = queryString.split("&");
-            //para:username=
-            for(String para : paras){
-                //array:[username,fancq]   若没参数值array:[password]
-                String[] array = para.split("=",2);
-                parameters.put(array[0],array[1]);
-            }
+            parseParameter(queryString);
         }
 
         System.out.println("requestURI:"+requestURI);
         System.out.println("queryString:"+queryString);
         System.out.println("parameters:"+parameters);
+    }
+
+    /**
+     * 解析参数
+     * 参数的格式应当为:name1=value1&name2=value2&...
+     * @param line
+     */
+    private void parseParameter(String line){
+        //paras:[username=fancq, password=, nickname=chuanqi, age=22]
+        String[] paras = line.split("&");
+        //para:username=
+        for(String para : paras){
+            //array:[username,fancq]   若没参数值array:[password]
+            String[] array = para.split("=",2);
+            parameters.put(array[0],array[1]);
+        }
     }
 
     //解析消息头
@@ -126,7 +135,7 @@ public class HttpServletRequest {
                 String contentType = headers.get("Content-Type");
                 if("application/x-www-form-urlencoded".equals(contentType)){//是否为form表单提交数据
                     String line = new String(data, StandardCharsets.ISO_8859_1);
-                    System.out.println("正文内容:"+line);
+                    parseParameter(line);
                 }
 //                else if(){//比如判断表单提交时附带附件的.
 //
