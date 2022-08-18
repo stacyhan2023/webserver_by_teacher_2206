@@ -3,6 +3,7 @@ package com.webserver.http;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -106,7 +107,34 @@ public class HttpServletRequest {
         System.out.println("headers:"+headers);
     }
     //解析消息正文
-    private void parseContent(){}
+    private void parseContent() throws IOException {
+        //请求方式是否为POST请求
+        if("post".equalsIgnoreCase(method)){
+            if(headers.containsKey("Content-Length")) {
+                //根据消息头Content-Length确定正文长度
+                int contentLength = Integer.parseInt(
+                    headers.get("Content-Length")
+                );
+                System.out.println("正文长度:"+contentLength);
+                //读取正文数据
+                InputStream in = socket.getInputStream();
+                byte[] data = new byte[contentLength];
+                in.read(data);
+                /*
+                    根据Content-Type来分析正文是什么以便进行对应的处理
+                 */
+                String contentType = headers.get("Content-Type");
+                if("application/x-www-form-urlencoded".equals(contentType)){//是否为form表单提交数据
+                    String line = new String(data, StandardCharsets.ISO_8859_1);
+                    System.out.println("正文内容:"+line);
+                }
+//                else if(){//比如判断表单提交时附带附件的.
+//
+//                }
+            }
+
+        }
+    }
 
     private String readLine() throws IOException {
         //当对同一个socket调用多次getInputStream方法时，获取回来的输入流始终是同一条流
