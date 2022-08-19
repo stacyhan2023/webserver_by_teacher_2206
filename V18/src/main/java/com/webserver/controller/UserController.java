@@ -1,5 +1,7 @@
 package com.webserver.controller;
 
+import com.webserver.annotations.Controller;
+import com.webserver.annotations.RequestMapping;
 import com.webserver.entity.User;
 import com.webserver.http.HttpServletRequest;
 import com.webserver.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import java.net.URISyntaxException;
 /**
  * 处理和用户相关的业务类
  */
+@Controller
 public class UserController {
     private static File userDir;
     static {
@@ -19,6 +22,7 @@ public class UserController {
         }
     }
 
+    @RequestMapping("/loginUser")
     public void login(HttpServletRequest request,HttpServletResponse response){
         //1
         String username = request.getParameter("username");
@@ -57,6 +61,7 @@ public class UserController {
         response.sendRedirect("/login_fail.html");
     }
 
+    @RequestMapping("/regUser")
     public void reg(HttpServletRequest request, HttpServletResponse response) {
         //1获取表单信息
         String username = request.getParameter("username");
