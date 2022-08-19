@@ -1,10 +1,14 @@
 package com.webserver.core;
 
+import com.webserver.annotations.Controller;
+import com.webserver.annotations.RequestMapping;
 import com.webserver.controller.UserController;
 import com.webserver.http.HttpServletRequest;
 import com.webserver.http.HttpServletResponse;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 
 /**
@@ -49,6 +53,7 @@ public class DispatcherServlet {
     public void service(HttpServletRequest request, HttpServletResponse response) {
         String path = request.getRequestURI();
         System.out.println("请求的抽象路径:" + path);
+        //path====>/regUser
         //首先判断该请求是否为请求一个业务
         /*
             当我们得到本次请求路径path的值后，我们首先要查看是否为请求业务:
@@ -62,9 +67,30 @@ public class DispatcherServlet {
             5:如果扫描了所有的Controller中所有的业务方法，均未找到与本次请求匹配的路径
               则说明本次请求并非处理业务，那么执行下面请求静态资源的操作
          */
-        File controllerDir = new File(dir,"/com/webserver/controller");
-
-
+        try {
+            File controllerDir = new File(dir,"/com/webserver/controller");
+            File[] subs = controllerDir.listFiles(f->f.getName().endsWith(".class"));
+            for(File sub : subs){
+                String fileName = sub.getName();
+                String className = fileName.substring(0,fileName.indexOf("."));
+                Class cls = Class.forName("com.webserver.controller."+className);
+                if(cls.isAnnotationPresent(Controller.class)){
+                    Method[] methods = cls.getDeclaredMethods();
+                    for(Method method : methods){
+                        if(method.isAnnotationPresent(RequestMapping.class)){
+                            RequestMapping rm = method.getAnnotation(RequestMapping.class);
+                            String value = rm.value();
+                            if(value.equals(path)){
+                                method.invoke(cls.newInstance(),request,response);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         File file = new File(staticDir, path);
