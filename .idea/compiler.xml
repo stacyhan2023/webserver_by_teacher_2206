@@ -24,6 +24,7 @@
         <module name="V17" />
         <module name="V4" />
         <module name="V5" />
+        <module name="V19" />
       </profile>
     </annotationProcessing>
   </component>
