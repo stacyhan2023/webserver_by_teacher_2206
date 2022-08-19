@@ -22,6 +22,11 @@ public class UserController {
         }
     }
 
+    @RequestMapping("/userList")
+    public void userList(HttpServletRequest request,HttpServletResponse response){
+        System.out.println("开始处理动态页面!!!!!!!");
+    }
+
     @RequestMapping("/loginUser")
     public void login(HttpServletRequest request,HttpServletResponse response){
         //1
