@@ -70,18 +70,18 @@ public class DispatcherServlet {
         try {
             File controllerDir = new File(dir,"/com/webserver/controller");
             File[] subs = controllerDir.listFiles(f->f.getName().endsWith(".class"));
-            for(File sub : subs){
-                String fileName = sub.getName();
-                String className = fileName.substring(0,fileName.indexOf("."));
-                Class cls = Class.forName("com.webserver.controller."+className);
-                if(cls.isAnnotationPresent(Controller.class)){
-                    Method[] methods = cls.getDeclaredMethods();
-                    for(Method method : methods){
-                        if(method.isAnnotationPresent(RequestMapping.class)){
-                            RequestMapping rm = method.getAnnotation(RequestMapping.class);
-                            String value = rm.value();
-                            if(value.equals(path)){
-                                method.invoke(cls.newInstance(),request,response);
+            for(File sub : subs){//遍历目录中所有的.class文件
+                String fileName = sub.getName();//获取文件名
+                String className = fileName.substring(0,fileName.indexOf("."));//根据文件名截取出类名
+                Class cls = Class.forName("com.webserver.controller."+className);//加载类对象
+                if(cls.isAnnotationPresent(Controller.class)){//判断这个类是否被@Controller注解标注
+                    Method[] methods = cls.getDeclaredMethods();//获取这个类定义的所有方法
+                    for(Method method : methods){//遍历每一个方法
+                        if(method.isAnnotationPresent(RequestMapping.class)){//判断该方法是否被@RequestMapping注解标注
+                            RequestMapping rm = method.getAnnotation(RequestMapping.class);//获取该方法上的注解@RequestMapping
+                            String value = rm.value();//获取该注解上定义的参数
+                            if(value.equals(path)){//判断注解参数是否与本次请求路径一致
+                                method.invoke(cls.newInstance(),request,response);//反射调用该方法
                                 return;
                             }
                         }
