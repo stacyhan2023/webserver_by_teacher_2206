@@ -10,6 +10,7 @@
         <module name="V7" />
         <module name="V8" />
         <module name="V9" />
+        <module name="BirdBoot" />
         <module name="V10" />
         <module name="V21" />
         <module name="V20" />
