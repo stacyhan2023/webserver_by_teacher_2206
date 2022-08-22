@@ -50,7 +50,12 @@ public class UserController {
         System.out.println(userList);
 
         try {
-            PrintWriter pw = new PrintWriter("./userList.html");
+            PrintWriter pw = new PrintWriter(
+                    new BufferedWriter(
+                            new OutputStreamWriter(
+                                    new FileOutputStream("./userList.html")
+                            )
+                    ));
             pw.println("<!DOCTYPE html>");
             pw.println("<html lang=\"en\">");
             pw.println("<head>");
