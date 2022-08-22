@@ -34,5 +34,30 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="BirdBoot" options="" />
+      <module name="V1" options="" />
+      <module name="V10" options="" />
+      <module name="V11" options="" />
+      <module name="V12" options="" />
+      <module name="V13" options="" />
+      <module name="V14" options="" />
+      <module name="V15" options="" />
+      <module name="V16" options="" />
+      <module name="V17" options="" />
+      <module name="V18" options="" />
+      <module name="V19" options="" />
+      <module name="V2" options="" />
+      <module name="V20" options="" />
+      <module name="V21" options="" />
+      <module name="V22" options="" />
+      <module name="V3" options="" />
+      <module name="V4" options="" />
+      <module name="V5" options="" />
+      <module name="V6" options="" />
+      <module name="V7" options="" />
+      <module name="V8" options="" />
+      <module name="V9" options="" />
+    </option>
   </component>
 </project>
