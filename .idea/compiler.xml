@@ -16,6 +16,7 @@
         <module name="V20" />
         <module name="V12" />
         <module name="V11" />
+        <module name="V22" />
         <module name="V14" />
         <module name="V13" />
         <module name="V16" />
@@ -30,5 +31,8 @@
         <module name="V19" />
       </profile>
     </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
   </component>
 </project>

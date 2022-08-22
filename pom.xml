@@ -31,6 +31,7 @@
         <module>V20</module>
         <module>V21</module>
         <module>BirdBoot</module>
+        <module>V22</module>
     </modules>
 
     <properties>
