@@ -32,6 +32,7 @@
         <module>V21</module>
         <module>BirdBoot</module>
         <module>V22</module>
+        <module>QR</module>
     </modules>
 
     <properties>

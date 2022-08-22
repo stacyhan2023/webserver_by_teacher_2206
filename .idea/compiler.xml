@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="V6" />
         <module name="V7" />
+        <module name="QR" />
         <module name="V8" />
         <module name="V9" />
         <module name="BirdBoot" />
@@ -36,6 +37,7 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="BirdBoot" options="" />
+      <module name="QR" options="" />
       <module name="V1" options="" />
       <module name="V10" options="" />
       <module name="V11" options="" />
