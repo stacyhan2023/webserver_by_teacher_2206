@@ -60,6 +60,7 @@ public class DispatcherServlet {
            if(method!=null){
                method.invoke(method.getDeclaringClass().newInstance(),
                              request,response);
+               return;
            }
         } catch (Exception e) {
             e.printStackTrace();
