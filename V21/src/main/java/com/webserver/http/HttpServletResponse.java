@@ -38,6 +38,8 @@ public class HttpServletResponse {
      * 将当前响应对象内容按照标准的响应格式发送给客户端
      */
     public void response() throws IOException {
+        //发送前的准备工作
+        sendBefore();
         //发送状态行
         sendStatusLine();
         //发送响应头
@@ -45,6 +47,14 @@ public class HttpServletResponse {
         //发送响应正文
         sendContent();
     }
+    //发送响应前的准备工作
+    private void sendBefore(){
+        if(out!=null){//说明有动态数据
+            //根据动态数据长度添加响应头Content-Length
+            addHeader("Content-Length",out.size()+"");
+        }
+    }
+
     //发送状态行
     private void sendStatusLine() throws IOException {
 //        HTTP/1.1 200 OK
@@ -71,7 +81,10 @@ public class HttpServletResponse {
     //发送响应正文
     private void sendContent() throws IOException {
         OutputStream out = socket.getOutputStream();
-        if(contentFile!=null) {
+        if(this.out!=null){
+            byte[] data = this.out.toByteArray();
+            out.write(data);//将动态数据作为正文发送给浏览器
+        }else if(contentFile!=null) {
             FileInputStream fis = new FileInputStream(contentFile);
             byte[] buf = new byte[1024 * 10];//10kb
             int len = 0;//记录每次实际读取的字节数
@@ -166,4 +179,22 @@ public class HttpServletResponse {
         return out;
     }
 
+    public PrintWriter getWriter(){
+        return new PrintWriter(
+                new BufferedWriter(
+                        new OutputStreamWriter(
+                                getOutputStream(),
+                                StandardCharsets.UTF_8
+                        )
+                ),true
+        );
+    }
+
+    /**
+     * 添加响应头Content-Type
+     * @param mime
+     */
+    public void setContentType(String mime){
+        addHeader("Content-Type",mime);
+    }
 }

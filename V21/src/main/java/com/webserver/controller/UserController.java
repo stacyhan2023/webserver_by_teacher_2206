@@ -17,6 +17,7 @@ import java.util.List;
 @Controller
 public class UserController {
     private static File userDir;
+
     static {
         userDir = new File("./users");
         if (!userDir.exists()) {
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @RequestMapping("/userList")
-    public void userList(HttpServletRequest request,HttpServletResponse response){
+    public void userList(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("开始处理动态页面!!!!!!!!!!!!!!!!!!!");
         /*
             1:读取users目录下的所有obj文件并反序列化然后将得到的所有User对象存入一个List集合
@@ -34,14 +35,14 @@ public class UserController {
         //1
         List<User> userList = new ArrayList<>();
         //1.1获取users目录中的所有obj文件
-        File[] subs = userDir.listFiles(f->f.getName().endsWith(".obj"));
+        File[] subs = userDir.listFiles(f -> f.getName().endsWith(".obj"));
         //1.2将每个文件都反序列化得到User对象
-        for(File file : subs){
+        for (File file : subs) {
             try (
                     FileInputStream fis = new FileInputStream(file);
                     ObjectInputStream ois = new ObjectInputStream(fis);
-            ){
-                User user = (User)ois.readObject();
+            ) {
+                User user = (User) ois.readObject();
                 userList.add(user);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -49,84 +50,70 @@ public class UserController {
         }
         System.out.println(userList);
 
-        try {
-            PrintWriter pw = new PrintWriter(
-                    new BufferedWriter(
-                            new OutputStreamWriter(
-                                    new FileOutputStream("./userList.html")
-                            )
-                    ));
-            pw.println("<!DOCTYPE html>");
-            pw.println("<html lang=\"en\">");
-            pw.println("<head>");
-            pw.println("<meta charset=\"UTF-8\">");
-            pw.println("<title>用户列表</title>");
-            pw.println("</head>");
-            pw.println("<body>");
-            pw.println("<center>");
-            pw.println("<h1>用户列表</h1>");
-            pw.println("<table border=\"1\">");
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter pw = response.getWriter();
+        pw.println("<!DOCTYPE html>");
+        pw.println("<html lang=\"en\">");
+        pw.println("<head>");
+        pw.println("<meta charset=\"UTF-8\">");
+        pw.println("<title>用户列表</title>");
+        pw.println("</head>");
+        pw.println("<body>");
+        pw.println("<center>");
+        pw.println("<h1>用户列表</h1>");
+        pw.println("<table border=\"1\">");
+        pw.println("<tr>");
+        pw.println("<td>用户名</td>");
+        pw.println("<td>密码</td>");
+        pw.println("<td>昵称</td>");
+        pw.println("<td>年龄</td>");
+        pw.println("<td>操作</td>");
+        pw.println("</tr>");
+
+        for (User user : userList) {
             pw.println("<tr>");
-            pw.println("<td>用户名</td>");
-            pw.println("<td>密码</td>");
-            pw.println("<td>昵称</td>");
-            pw.println("<td>年龄</td>");
-            pw.println("<td>操作</td>");
+            pw.println("<td>" + user.getUsername() + "</td>");
+            pw.println("<td>" + user.getPassword() + "</td>");
+            pw.println("<td>" + user.getNickname() + "</td>");
+            pw.println("<td>" + user.getAge() + "</td>");
+            pw.println("<td><a href='/deleteUser?username=" + user.getUsername() + "'>删除</a></td>");
             pw.println("</tr>");
-
-            for(User user : userList) {
-                pw.println("<tr>");
-                pw.println("<td>"+user.getUsername()+"</td>");
-                pw.println("<td>"+user.getPassword()+"</td>");
-                pw.println("<td>"+user.getNickname()+"</td>");
-                pw.println("<td>"+user.getAge()+"</td>");
-                pw.println("<td><a href='/deleteUser?username="+ user.getUsername() +"'>删除</a></td>");
-                pw.println("</tr>");
-            }
-
-            pw.println("</table>");
-            pw.println("</center>");
-            pw.println("</body>");
-            pw.println("</html>");
-
-            pw.close();
-
-            response.setContentFile(new File("./userList.html"));
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
+
+        pw.println("</table>");
+        pw.println("</center>");
+        pw.println("</body>");
+        pw.println("</html>");
 
 
     }
 
     @RequestMapping("/loginUser")
-    public void login(HttpServletRequest request,HttpServletResponse response){
+    public void login(HttpServletRequest request, HttpServletResponse response) {
         //1
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        if(username==null||username.isEmpty()||password==null||password.isEmpty()){
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
             response.sendRedirect("/login_info_error.html");
             return;
         }
 
         //2
         //根据登录用户的用户名去users目录下寻找该用户信息
-        File file = new File(userDir,username+".obj");
-        if(file.exists()){//文件存在则说明该用户存在(用户名输入正确)
+        File file = new File(userDir, username + ".obj");
+        if (file.exists()) {//文件存在则说明该用户存在(用户名输入正确)
             //反序列化文件中该用户曾经的注册信息
             try (
                     FileInputStream fis = new FileInputStream(file);
                     ObjectInputStream ois = new ObjectInputStream(fis);
-            ){
-                User user = (User)ois.readObject();
+            ) {
+                User user = (User) ois.readObject();
                 //比较登录密码和注册时输入的密码是否一致
                 // a = "abc123"    b = "AbC123"
                 //a.equals(b) ==> false
                 //a.equalsIgnoreCase(b) ==> true
-                if(user.getPassword().equals(password)){
+                if (user.getPassword().equals(password)) {
                     //登录成功
                     response.sendRedirect("/login_success.html");
                     return;
@@ -168,7 +155,7 @@ public class UserController {
         try (
                 FileOutputStream fos = new FileOutputStream(file);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
-        ){
+        ) {
             oos.writeObject(user);
         } catch (IOException e) {
             e.printStackTrace();
