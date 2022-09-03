@@ -1,5 +1,6 @@
 package com.webserver.http;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -127,8 +128,9 @@ public class HttpServletResponse {
         this.contentFile = contentFile;
 
         //添加用于说明正文的响应头Content-Type和Content-Length
-        try {
-            String contentType = Files.probeContentType(contentFile.toPath());
+//        try {
+//            String contentType = Files.probeContentType(contentFile.toPath());
+            String contentType = new MimetypesFileTypeMap().getContentType(contentFile);
                 /*
                     如果根据正文文件分析出了Content-Type的值则设置该响应头.
                     HTTP协议规定如果服务端发送的响应中没有包含这个头,就表明让浏览器自行判断
@@ -137,9 +139,9 @@ public class HttpServletResponse {
             if(contentType!=null){
                 addHeader("Content-Type",contentType);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         addHeader("Content-Length",contentFile.length()+"");
 
 
@@ -196,5 +198,10 @@ public class HttpServletResponse {
      */
     public void setContentType(String mime){
         addHeader("Content-Type",mime);
+    }
+
+    public static void main(String[] args) {
+        String contentType = new MimetypesFileTypeMap().getContentType("java.MP4");
+        System.out.println(contentType);
     }
 }
