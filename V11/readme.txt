@@ -9,5 +9,5 @@
   原因:一个响应中只要包含正文就应当包含说明正文信息的两个头Content-Type和
   Content-Length.因此我们完全可以在设置正文的时候自动设置这两个头.
   这样做的好处是将来设置完正文(调用setContentFile)后无需再单独设置这两个头了.
-2:使用Files的静态方法probeContentType按照正文文件分析MIME类型并设置到
+2:使用MimetypesFileTypeMap的方法getContentType按照正文文件分析MIME类型并设置到
   响应头Content-Type上
