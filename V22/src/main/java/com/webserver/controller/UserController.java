@@ -8,6 +8,7 @@ import com.webserver.http.HttpServletResponse;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,12 @@ public class UserController {
     private static File userDir;
 
     static {
+        try {
+//            Class.forName("org.mariadb.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         userDir = new File("./users");
         if (!userDir.exists()) {
             userDir.mkdirs();
@@ -34,20 +41,39 @@ public class UserController {
          */
         //1
         List<User> userList = new ArrayList<>();
-        //1.1获取users目录中的所有obj文件
-        File[] subs = userDir.listFiles(f -> f.getName().endsWith(".obj"));
-        //1.2将每个文件都反序列化得到User对象
-        for (File file : subs) {
-            try (
-                    FileInputStream fis = new FileInputStream(file);
-                    ObjectInputStream ois = new ObjectInputStream(fis);
-            ) {
-                User user = (User) ois.readObject();
+//        //1.1获取users目录中的所有obj文件
+//        File[] subs = userDir.listFiles(f -> f.getName().endsWith(".obj"));
+//        //1.2将每个文件都反序列化得到User对象
+//        for (File file : subs) {
+//            try (
+//                    FileInputStream fis = new FileInputStream(file);
+//                    ObjectInputStream ois = new ObjectInputStream(fis);
+//            ) {
+//                User user = (User) ois.readObject();
+//                userList.add(user);
+//            } catch (IOException | ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        try (
+//                Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/test_db","root","root");
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test_db?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true","root","root");
+                Statement statement = connection.createStatement();
+        ){
+            ResultSet rs = statement.executeQuery("SELECT * FROM userinfo");
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String username  = rs.getString(2);
+                String password  = rs.getString(3);
+                String nickname  = rs.getString(4);
+                int age  = rs.getInt(5);
+                User user = new User(username,password,nickname,age);
                 userList.add(user);
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         System.out.println(userList);
 
         response.setContentType("text/html;charset=utf-8");
@@ -149,21 +175,37 @@ public class UserController {
 //        User user = new User(username, password, nickname, age);
 //        File file = new File(userDir, username + ".obj");
 
-        File file = new File(userDir, user.getUsername() + ".obj");
-        if (file.exists()) {//文件已经存在说明是重复用户
-            response.sendRedirect("/have_user.html");
-            return;
-        }
+//        File file = new File(userDir, user.getUsername() + ".obj");
+//        if (file.exists()) {//文件已经存在说明是重复用户
+//            response.sendRedirect("/have_user.html");
+//            return;
+//        }
+//
+//        try (
+//                FileOutputStream fos = new FileOutputStream(file);
+//                ObjectOutputStream oos = new ObjectOutputStream(fos);
+//        ) {
+//            oos.writeObject(user);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         try (
-                FileOutputStream fos = new FileOutputStream(file);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-        ) {
-            oos.writeObject(user);
-        } catch (IOException e) {
+                Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/test_db","root","root");
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO userinfo (username,password,nickname,age) VALUES (?,?,?,?)");
+        ){
+            statement.setString(1,user.getUsername());
+            statement.setString(2,user.getPassword());
+            statement.setString(3,user.getNickname());
+            statement.setInt(4,user.getAge());
+            int num = statement.executeUpdate();
+            if(num>0){
+                response.sendRedirect("/reg_success.html");
+            }else{
+                response.sendRedirect("/reg_fail.html");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        response.sendRedirect("/reg_success.html");
-
     }
 }

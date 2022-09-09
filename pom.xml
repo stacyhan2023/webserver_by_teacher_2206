@@ -34,6 +34,18 @@
         <module>V22</module>
         <module>QR</module>
     </modules>
+    <dependencies>
+        <!--<dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.0.7</version>
+        </dependency>-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.15</version>
+        </dependency>
+    </dependencies>
 
     <properties>
         <!-- 设置 JDK 版本为 1.8 -->

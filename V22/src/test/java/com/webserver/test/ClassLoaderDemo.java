@@ -2,6 +2,7 @@ package com.webserver.test;
 
 import sun.misc.Launcher;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,12 +20,15 @@ public class ClassLoaderDemo {
 //        Launcher.getBootstrapClassPath();
 //        System.out.println(loader);
         // 获取当前项目路径, Main是当前类, 可以指定其它类, 这个无所谓
-        String pathname = ClassLoaderDemo.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        System.out.println("当前路径: " + pathname);
+//        String pathname = ClassLoaderDemo.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String javaHome = System.getProperty ("java.home");
+        System.out.println("当前路径: " + javaHome);
+
 // 使用JarFile打开jar文件
         JarFile jar = null;
         try {
-            jar = new JarFile(pathname);
+            jar = new JarFile(javaHome+ File.separator+"lib"+File.separator+"rt.jar");
+            JarEntry je = jar.getJarEntry("java/lang/String.class");
 
             Enumeration<JarEntry> entryEnumeration = jar.entries();
             while (entryEnumeration.hasMoreElements()) {
